@@ -1,1 +1,135 @@
 #include <iostream>
+#include <iomanip>
+using namespace std;
+
+const int MAX_ARRAY_SIZE = 18;
+const int MIN_ARRAY_SIZE = 8;
+const int MAX_PIECES = 72;			//might not use
+
+const int NOPLAYER = 0;
+const int WHITEPLAYER = 1;
+const int REDPLAYER = 2;
+
+const int WHITESOLDIER = 1;
+const int WHITEMULE = 2;
+const int WHITEKING = 3;
+const int REDSOLDIER = 4;
+const int REDMULE = 5;
+const int REDKING = 6;
+
+const int NOONEWINS = 0;
+const int WHITEWINS = 1;			//might not use
+const int REDWINS = 2;				//might not use
+
+void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard);
+void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard);
+int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]);
+bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex);
+int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]);
+bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc);
+bool IsJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc);
+bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int fromSquareNum, int toSquareNum, bool &jumped);
+bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard);
+
+int main() {
+	int myCMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = { {4, 1, 2, 4, 3, 5, 6}, {2, 5} };		//change int to auto variable?
+	int xIndicesMove[MAX_PIECES] = { 0 };
+	int yIndicesMove[MAX_PIECES] = { 0 };
+	int xIndicesJump[MAX_PIECES] = { 0 };
+	int yIndicesJump[MAX_PIECES] = { 0 };
+
+	int numRowsInBoard = 0;
+
+	for (int tries = 1; tries <= 3; tries++) {
+		cout << "Enter the number of squares along each edge of the board\n";
+
+		if (!(cin >> numRowsInBoard)) {
+			cerr << "ERROR: Board size is not an integer.\n8 <= number of squares <= 18\n";
+			cin.clear();
+			cin.ignore();
+		}
+		else if (numRowsInBoard > 18)
+			cerr << "ERROR: Board size too large.\n8 <= number of squares <= 18\n";
+		else if (numRowsInBoard < 8)
+			cerr << "ERROR: Board size too small.\n8 <= number of squares <= 18\n";
+		else if (numRowsInBoard % 2 == 1)
+			cerr << "ERROR: Board size odd.\n8 <= number of squares <= 18\n";
+		else
+			break;
+
+		if (tries == 3) {
+			cerr << "ERROR: Too many errors entering the size of the board.";
+			return 1;
+		}
+	}
+
+
+
+	DisplayBoard(myCMCheckersBoard, numRowsInBoard);
+	return 0;
+}
+
+void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+
+}
+
+void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+	int squareNumber = 0;
+
+	for (int j = 0; j < numRowsInBoard; j++) {
+		for (int i = 0; i < numRowsInBoard; i++) {
+			if (CMCheckersBoard[i][j] == WHITESOLDIER)
+				cout << "  WS";
+			else if (CMCheckersBoard[i][j] == WHITEMULE)
+				cout << "  WM";
+			else if (CMCheckersBoard[i][j] == WHITEKING)
+				cout << "  WK";
+			else if (CMCheckersBoard[i][j] == REDSOLDIER)
+				cout << "  RS";
+			else if (CMCheckersBoard[i][j] == REDMULE)
+				cout << "  RM";
+			else if (CMCheckersBoard[i][j] == REDKING)
+				cout << "  RK";
+			else
+				cout << setw(4) << squareNumber;
+
+			squareNumber++;
+		}
+		cout << endl;
+	}
+}
+
+int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]) {
+
+	return 0;
+}
+
+bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex) {
+
+	return false;
+}
+
+int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]) {
+
+	return 0;
+}
+
+bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc) {
+
+	return false;
+}
+
+bool IsJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc) {
+
+	return false;
+}
+
+bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int fromSquareNum, int toSquareNum, bool &jumped) {
+
+	return false;
+}
+
+bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+
+	return false;
+}
