@@ -33,33 +33,40 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard);
 
 
-int main() {
-	int myCMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = { {4, 1, 2, 4, 3, 5, 6}, {2, 5} };		//change int to auto variable?
+int main()
+{
+	int myCMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE] = { {0, 0, 4, 0}, {0, 0, 0, 0}, {0, 0, 0, 0}, {0, 1, 0, 0} };		//change int to auto variable?
 	int xIndicesMove[MAX_PIECES] = { 0 };
 	int yIndicesMove[MAX_PIECES] = { 0 };
 	int xIndicesJump[MAX_PIECES] = { 0 };
 	int yIndicesJump[MAX_PIECES] = { 0 };
 
 	int numRowsInBoard = 0;
+	const int numRowsInBoardMin = 8;
+	const int numRowsInBoardMax = 18;
+	bool test = false;
 
-	for (int tries = 1; tries <= 3; tries++) {
+	for (int tries = 1; tries <= 3; tries++)
+	{
 		cout << "Enter the number of squares along each edge of the board\n";
 
-		if (!(cin >> numRowsInBoard)) {
+		if (!(cin >> numRowsInBoard))
+		{
 			cerr << "ERROR: Board size is not an integer.\n8 <= number of squares <= 18\n";
 			cin.clear();
 			cin.ignore();
 		}
-		else if (numRowsInBoard > 18)
+		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large.\n8 <= number of squares <= 18\n";
-		else if (numRowsInBoard < 8)
+		else if (numRowsInBoard < 4)													//change back to rowsMin
 			cerr << "ERROR: Board size too small.\n8 <= number of squares <= 18\n";
 		else if (numRowsInBoard % 2 == 1)
 			cerr << "ERROR: Board size odd.\n8 <= number of squares <= 18\n";
 		else
 			break;
 
-		if (tries == 3) {
+		if (tries == 3)
+		{
 			cerr << "ERROR: Too many errors entering the size of the board.";
 			return 1;
 		}
@@ -68,18 +75,23 @@ int main() {
 
 
 	DisplayBoard(myCMCheckersBoard, numRowsInBoard);
+	test = IsJump(myCMCheckersBoard, numRowsInBoard, WHITEPLAYER, 3, 1);
 	return 0;
 }
 
-void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
+{
 
 }
 
-void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
+{
 	int squareNumber = 0;
 
-	for (int j = 0; j < numRowsInBoard; j++) {
-		for (int i = 0; i < numRowsInBoard; i++) {
+	for (int j = 0; j < numRowsInBoard; j++)
+	{
+		for (int i = 0; i < numRowsInBoard; i++)
+		{
 			if (CMCheckersBoard[i][j] == WHITESOLDIER)
 				cout << "  WS";
 			else if (CMCheckersBoard[i][j] == WHITEMULE)
@@ -101,69 +113,73 @@ void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRo
 	}
 }
 
-int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]) {
+int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[])
+{
 
 	return 0;
 }
 
-bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex) {
+bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex)
+{
 
 	return false;
 }
 
-int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[]) {
+int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[])
+{
 
 	return 0;
 }
 
-bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc) {
+bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc)
+{
 
 	return false;
 }
 
-bool IsJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc) {
+bool IsJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc)
+{
 	
-	if (CMCheckersBoard[xLoc][yLoc] == WHITEKING) {
-			if (CMCheckersBoard[(xLoc + 1) % numRowsInBoard][(yLoc - 1) % numRowsInBoard] >= 4 && CMCheckersBoard[(xLoc + 1) % numRowsInBoard][(yLoc - 1) % numRowsInBoard] <= 6)
-				if (CMCheckersBoard[(xLoc + 2) % numRowsInBoard][(yLoc - 2) % numRowsInBoard] == 0)
-					return true;
+	if (CMCheckersBoard[xLoc][yLoc] == WHITEKING || CMCheckersBoard[xLoc][yLoc] == REDKING)
+	{
+		if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, -1) == true)
+			return true;
 
-			if (CMCheckersBoard[(xLoc - 1) % numRowsInBoard][(yLoc - 1) % numRowsInBoard] >= 4 && CMCheckersBoard[(xLoc - 1) % numRowsInBoard][(yLoc - 1) % numRowsInBoard] <= 6)
-				if (CMCheckersBoard[(xLoc - 2) % numRowsInBoard][(yLoc - 2) % numRowsInBoard] == 0)
-					return true;
+		if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, -1) == true)
+			return true;
 	}
 		
-	if (CMCheckersBoard[(xLoc + 1) % numRowsInBoard][(yLoc + 1) % numRowsInBoard] >= 4 && CMCheckersBoard[(xLoc + 1) % numRowsInBoard][(yLoc + 1) % numRowsInBoard] <= 6)
-			if (CMCheckersBoard[(xLoc + 2) % numRowsInBoard][(yLoc + 2) % numRowsInBoard] == 0)
-				return true;
+	if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, 1) == true)
+		return true;
 
-	if (CMCheckersBoard[(xLoc - 1) % numRowsInBoard][(yLoc + 1) % numRowsInBoard] >= 4 && CMCheckersBoard[(xLoc - 1) % numRowsInBoard][(yLoc + 1) % numRowsInBoard] <= 6)
-			if (CMCheckersBoard[(xLoc - 2) % numRowsInBoard][(yLoc + 2) % numRowsInBoard] == 0)
-				return true;
+	if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, 1) == true)
+		return true;
 
 	return false;
 }
 
-bool CheckJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection) {
+bool CheckJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection)
+{
 	if (player == WHITEPLAYER)
-		if (CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc + yDirection) % numRowsInBoard] == REDSOLDIER || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc + yDirection) % numRowsInBoard] == REDMULE || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc + yDirection) % numRowsInBoard] == REDKING)
+		if (CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc + yDirection] == REDSOLDIER || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc + yDirection] == REDMULE || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc + yDirection] == REDKING)
 			if (CMCheckersBoard[(xLoc + 2 * xDirection) % numRowsInBoard][(yLoc + 2 * yDirection) % numRowsInBoard] == NOPLAYER)
 				return true;
-
-	if (player == REDPLAYER)
-		if (CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc - yDirection) % numRowsInBoard] == WHITESOLDIER || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc - yDirection) % numRowsInBoard] == WHITEMULE || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][(yLoc - yDirection) % numRowsInBoard] == WHITEKING)
-			if (CMCheckersBoard[(xLoc + 2 * xDirection) % numRowsInBoard][(yLoc - 2 * yDirection) % numRowsInBoard] == NOPLAYER)
+	else if (player == REDPLAYER)
+		if (CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc - yDirection] == WHITESOLDIER || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc - yDirection] == WHITEMULE || CMCheckersBoard[(xLoc + xDirection) % numRowsInBoard][yLoc - yDirection] == WHITEKING)
+			if (CMCheckersBoard[(xLoc + 2 * xDirection) % numRowsInBoard][yLoc - 2 * yDirection] == NOPLAYER)
 				return true;
 
 	return false;
 }
 
-bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int fromSquareNum, int toSquareNum, bool &jumped) {
+bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int fromSquareNum, int toSquareNum, bool &jumped)
+{
 
 	return false;
 }
 
-bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) {
+bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
+{
 
 	return false;
 }
