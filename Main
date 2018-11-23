@@ -82,16 +82,27 @@ int main()
 void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard) 
 {
 	int squareNumber = 0;
-	for (int j = 0; j < numRowsInBoard; j+=2) 
-	{
-		CMCheckersBoard[j][numRowsInBoard - 1] = REDMULE;
-		CMCheckersBoard[j][numRowsInBoard + 1] = REDSOLDIER;
-		CMCheckersBoard[j+1][numRowsInBoard] = REDSOLDIER;
+
+	for (int j = 0; j < numRowsInBoard; j += 2) {
 		CMCheckersBoard[j+1][0] = WHITEMULE;
-		CMCheckersBoard[j+1][2] = WHITEMULE;
-		CMCheckersBoard[j][1] = WHITEMULE;
+		CMCheckersBoard[j][numRowsInBoard - 1] = REDMULE;
 	}
-}
+
+	for (int i = 1; i <= ((numRowsInBoard / 2) - 2); i += 2) {
+		for (int j = 0; j < numRowsInBoard; j += 2) {
+			CMCheckersBoard[j+1][numRowsInBoard-i-1] = REDSOLDIER;
+			CMCheckersBoard[j][i] = WHITESOLDIER;
+		}
+	}
+
+	for (int i = 2; i <= ((numRowsInBoard / 2) - 2); i += 2) {
+		for (int j = 0; j < numRowsInBoard; j += 2) {
+			CMCheckersBoard[j][numRowsInBoard-i-1] = REDSOLDIER;
+			CMCheckersBoard[j+1][i] = WHITESOLDIER;
+		}
+	}
+				
+	}
 
 void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
 {
