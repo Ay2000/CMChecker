@@ -200,6 +200,61 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 
 bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
 {
+	int REDMULE_count = 0;
+	int WHITEMULE_count = 0;
+	int WHITESOLDIER_count = 0;
+	int REDSOLDIER_count = 0;
+	int WHITEKING_count = 0;
+	int REDKING_count = 0;
 
-	return false;
+	for (int j = 0; j < numRowsInBoard; j++)
+	{
+		for (int i = 0; i < numRowsInBoard; i++)
+		{
+			if (CMCheckersBoard[j][i] == REDMULE)
+			{
+				REDMULE_count++;
+			}
+			else if (CMCheckersBoard[j][i] == WHITEMULE)
+			{
+				WHITEMULE_count++;
+			}
+			else if (CMCheckersBoard[j][i] == WHITESOLDIER)
+			{
+				WHITESOLDIER_count++;
+			}
+			else if (CMCheckersBoard[j][i] == REDSOLDIER)
+			{
+				REDSOLDIER_count++;
+			}
+			else if (CMCheckersBoard[j][i] == REDKING)
+			{
+				REDKING_count++;
+			}
+			else if (CMCheckersBoard[j][i] == WHITEKING)
+			{
+				WHITEKING_count++;
+			}
+		}
+	}
+	if (REDMULE_count == 0)
+	{
+		cout << "The Red Player has won the game by losing all of the Red Mules" << endl;
+		return true;
+	}
+	else if (WHITEMULE_count == 0)
+	{
+		cout << "The White Player has won the game by losing all of the White Mules" << endl;
+		return true;
+	}
+	else if (REDKING_count == 0 && REDSOLDIER_count == 0)
+	{
+		cout << "The White Player has won by capturing all of the red players soldiers and kings" << endl;
+		return true;
+	}
+	else if (WHITEKING_count == 0 && WHITESOLDIER_count == 0)
+	{
+		cout << "The Red Player has won by capturing all of the white players soldiers and kings" << endl;
+		return true;
+	}
 }
