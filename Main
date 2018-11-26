@@ -36,7 +36,7 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection);
 bool CheckJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection);
 bool IsPlayersPiece(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int player, int xLoc, int yLoc);
-void getCoordinates(int squareNumber, int numRowsInBoard, int& xCoordinate, int& yCoordinate);
+void getCoordinates(int squareNumber, int numRowsInBoard, int &xCoordinate, int &yCoordinate);
 int getSquare(int xCoordinate, int yCoordinate, int numRowsInBoard);
 int otherPlayer(int player);
 
@@ -52,12 +52,6 @@ int main()
 	const int numRowsInBoardMin = 8;
 	const int numRowsInBoardMax = 18;
 
-	int player = NOPLAYER;
-	int numJumps = 0;
-	int numMove1Squares = 0;
-	int winner = NOONEWINS;
-	char endChar = 0;
-
 	int initialSquare = 0;
 	int xInitialSquare = 0;
 	int yInitialSquare = 0;
@@ -65,6 +59,14 @@ int main()
 	int finalSquare = 0;
 	int xFinalSquare = 0;
 	int yFinalSquare = 0;
+
+	int player = NOPLAYER;
+	int numJumps = 0;
+	int numMove1Squares = 0;
+	bool jumped = false;
+
+	int winner = NOONEWINS;
+	char endChar = 0;
 
 	for (int tries = 1; tries <= 3; tries++)
 	{
@@ -97,7 +99,8 @@ int main()
 	DisplayBoard(myCMCheckersBoard, numRowsInBoard);
 	player = WHITEPLAYER;
 
-	while (winner == NOONEWINS) {
+	while (winner == NOONEWINS)
+	{
 		fill_n(xIndicesJump, MAX_PIECES, -1);
 		fill_n(yIndicesJump, MAX_PIECES, -1);
 		fill_n(xIndicesMove, MAX_PIECES, -1);
@@ -105,13 +108,16 @@ int main()
 		numJumps = CountJumps(myCMCheckersBoard, numRowsInBoard, player, xIndicesJump, yIndicesJump);
 		numMove1Squares = CountMove1Squares(myCMCheckersBoard, numRowsInBoard, player, xIndicesMove, yIndicesMove);
 
-		if (numJumps == 0 && numMove1Squares == 0) {
-			if (player == WHITEPLAYER) {
+		if (numJumps == 0 && numMove1Squares == 0)
+		{
+			if (player == WHITEPLAYER)
+			{
 				cout << "White is unable to move." << endl << "GAME OVER, Red has won." << endl << "Enter any character to close the game." << endl;
 				cin >> endChar;
 				return REDWINS;
 			}
-			else if (player == REDPLAYER) {
+			else if (player == REDPLAYER)
+			{
 				cout << "Red is unable to move." << endl << "GAME OVER, White has won." << endl << "Enter any character to close the game." << endl;
 				cin >> endChar;
 				return WHITEWINS;
@@ -123,36 +129,44 @@ int main()
 		else if (player == REDPLAYER)
 			cout << "Red takes a turn." << endl;
 		
-		while (true) {
+		while (true)
+		{
+			jumped = false;
 			cout << "Enter the square number of the checker you want to move" << endl;
 
-			if (!(cin >> initialSquare)) {
+			if (!(cin >> initialSquare))
+			{
 				cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
 				cin.clear();
 				cin.ignore();
 				continue;
 			}
-			else if (initialSquare < 0 || initialSquare >= (numRowsInBoard * numRowsInBoard)) {
+			else if (initialSquare < 0 || initialSquare >= (numRowsInBoard * numRowsInBoard))
+			{
 				cerr << "ERROR: That square is not on the board." << endl << "Try again" << endl;
 				continue;
 			}
-			
+
 			getCoordinates(initialSquare, numRowsInBoard, xInitialSquare, yInitialSquare);
 
-			if (IsPlayersPiece(myCMCheckersBoard, otherPlayer(player), xInitialSquare, yInitialSquare)) {
+			if (IsPlayersPiece(myCMCheckersBoard, otherPlayer(player), xInitialSquare, yInitialSquare))
+			{
 				cerr << "ERROR: That square contains an opponent's checker." << endl << "Try again" << endl;
 				continue;
 			}
-			else if (myCMCheckersBoard[xInitialSquare][yInitialSquare] == NOPLAYER) {
+			else if (myCMCheckersBoard[xInitialSquare][yInitialSquare] == NOPLAYER)
+			{
 				cerr << "ERROR: That square is empty." << endl << "Try again" << endl;
 				continue;
 			}
-
-			if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare)) {
-				if (numJumps != 0) {
+			else if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
+			{
+				if (numJumps != 0)
+				{
 					cerr << "ERROR: You can jump with another checker, you may not move your chosen checker." << endl
 						<< "You can jump using checkers on the following squares:";
-					for (int index1 = 0; index1 < MAX_PIECES; index1++) {
+					for (int index1 = 0; index1 < MAX_PIECES; index1++)
+					{
 						if (xIndicesJump[index1] == -1 || yIndicesJump[index1] == -1)
 							break;
 						cerr << " " << getSquare(xIndicesJump[index1], yIndicesJump[index1], numRowsInBoard);
@@ -160,64 +174,106 @@ int main()
 					cerr << endl << "Try again" << endl;
 					continue;
 				}
-				else if (!IsMove1Square(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare)) {
+				else if (!IsMove1Square(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
+				{
 					cerr << "ERROR: There is no legal move for this checker." << endl << "Try again" << endl;
 					continue;
 				}
 			}
-			
-			break;
-		}
 
-		while (true) {
 			cout << "Enter the square number of the square you want to move your checker to" << endl;
-			
-			if (!(cin >> finalSquare)) {
-				cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
-				cin.ignore();
-				cin.clear();
-				continue;
-			}
-			else if (finalSquare < 0 && finalSquare >= (numRowsInBoard * numRowsInBoard)) {
-				cerr << "ERROR: It is not possible to move to a square that is not on the board." << endl << "Try again" << endl;
-				continue;
-			}
 
-			getCoordinates(finalSquare, numRowsInBoard, xFinalSquare, yFinalSquare);
+			do
+			{
+				if (!(cin >> finalSquare))
+				{
+					cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
+					cin.clear();
+					cin.ignore();
+					continue;
+				}
+				else if (finalSquare < 0 && finalSquare >= (numRowsInBoard * numRowsInBoard))
+				{
+					cerr << "ERROR: It is not possible to move to a square that is not on the board." << endl << "Try again" << endl;
+					continue;
+				}
 
-			if (myCMCheckersBoard[xFinalSquare][yFinalSquare] == NOPLAYER) {
-				cerr << "ERROR: It is not possible to move to a square that is already occupied." << endl << "Try again" << endl;
+				getCoordinates(finalSquare, numRowsInBoard, xFinalSquare, yFinalSquare);
+
+				if (myCMCheckersBoard[xFinalSquare][yFinalSquare] != NOPLAYER)
+				{
+					cerr << "ERROR: It is not possible to move to a square that is already occupied." << endl << "Try again" << endl;
+					continue;
+				}
+				else if (IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare) && abs(xFinalSquare - xInitialSquare) == 1 && abs(yFinalSquare - yInitialSquare) == 1)
+				{
+					cerr << "ERROR: You can jump with this checker, you must jump not move 1 space." << endl << "Try again" << endl;
+					continue;
+				}
+				else if (!MakeMove(myCMCheckersBoard, numRowsInBoard, player, initialSquare, finalSquare, jumped))
+				{
+					DisplayBoard(myCMCheckersBoard, numRowsInBoard);
+					cerr << "ERROR: Moving to that square is not legal, Try again." << endl;
+					continue;
+				}
+
+				DisplayBoard(myCMCheckersBoard, numRowsInBoard);
+
+				if (jumped)
+				{
+					if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xFinalSquare, yFinalSquare))
+					{
+						break;
+					}
+
+					initialSquare = finalSquare;
+					xInitialSquare = xFinalSquare;
+					yInitialSquare = yFinalSquare;
+
+					cout << "You can jump again, Please enter the next square you wish to move your checker to" << endl;
+				}
+			} while (true);
+
+			if (!CheckWin(myCMCheckersBoard, numRowsInBoard))
+			{
+				DisplayBoard(myCMCheckersBoard, numRowsInBoard);
 				continue;
 			}
-			else if (IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare) && abs(xFinalSquare - xInitialSquare) == 1 && abs(yFinalSquare - yInitialSquare) == 1) {
-				cerr << "ERROR: You can jump with this checker, you must jump not move 1 space." << endl << "Try again" << endl;
+			else
+			{
+				cout << "Enter any character to terminate the game then press the enter key" << endl << "The program will terminate after the player presses the enter key" << endl;
+				cin >> endChar;
+				return 0;
 			}
 		}
 	}
-
-	return NOONEWINS;
 }
 
 void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
 {
 	int squareNumber = 0;
 
-	for (int j = 0; j < numRowsInBoard; j += 2) {
-		CMCheckersBoard[j + 1][0] = WHITEMULE;
-		CMCheckersBoard[j][numRowsInBoard - 1] = REDMULE;
+	for (int i = 0; i < numRowsInBoard; i += 2)
+	{
+		CMCheckersBoard[i + 1][0] = WHITEMULE;
+		CMCheckersBoard[i][numRowsInBoard - 1] = REDMULE;
 	}
 
-	for (int i = 1; i <= ((numRowsInBoard / 2) - 2); i += 2) {
-		for (int j = 0; j < numRowsInBoard; j += 2) {
-			CMCheckersBoard[j + 1][numRowsInBoard - i - 1] = REDSOLDIER;
-			CMCheckersBoard[j][i] = WHITESOLDIER;
+	for (int j = 1; j <= ((numRowsInBoard / 2) - 2); j += 2)
+	{
+		for (int i = 0; i < numRowsInBoard; i += 2)
+		{
+			CMCheckersBoard[i + 1][numRowsInBoard - j - 1] = REDSOLDIER;
+			CMCheckersBoard[i][j] = WHITESOLDIER;
 		}
 	}
 
-	for (int i = 2; i <= ((numRowsInBoard / 2) - 2); i += 2) {
-		for (int j = 0; j < numRowsInBoard; j += 2) {
-			CMCheckersBoard[j][numRowsInBoard - i - 1] = REDSOLDIER;
-			CMCheckersBoard[j + 1][i] = WHITESOLDIER;
+	for (int j = 2; j <= ((numRowsInBoard / 2) - 2); j += 2)
+	{
+		for (int i = 0; i < numRowsInBoard; i += 2)
+		{
+			CMCheckersBoard[i][numRowsInBoard - j - 1] = REDSOLDIER;
+			CMCheckersBoard[i + 1][j] = WHITESOLDIER;
 		}
 	}
 }
@@ -283,22 +339,51 @@ int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsI
 
 bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex)
 {
-	for (int i = 0; i < sizeof(inArray1); i++) {
-		if (inArray1[i] == xIndex) {
-			for (int j = 0; j < sizeof(inArray2); j++) {
-				if (inArray2[j] == yIndex) {
+	for (int i = 0; i < sizeof(inArray1); i++)
+		if (inArray1[i] == xIndex)
+			for (int j = 0; j < sizeof(inArray2); j++)
+				if (inArray2[j] == yIndex)
 					return true;
-				}
-			}
-		}
-	}
+
 	return false;
 }
 
 int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[])
 {
+	int numMove = 0;
 
-	return 0;
+	for (int yIndex = 0; yIndex < numRowsInBoard; yIndex++)
+	{
+		for (int xIndex = 0; xIndex < numRowsInBoard; xIndex++)
+		{
+			if (player == WHITEPLAYER)
+			{
+				if (IsWhitePiece(CMCheckersBoard, xIndex, yIndex) == true)
+				{
+					if (IsMove1Square(CMCheckersBoard, numRowsInBoard, player, xIndex, yIndex) == true)
+					{
+						xLocArray[numMove] = xIndex;
+						yLocArray[numMove] = yIndex;
+						numMove++;
+					}
+				}
+			}
+			else if (player == REDPLAYER)
+			{
+				if (IsRedPiece(CMCheckersBoard, xIndex, yIndex) == true)
+				{
+					if (IsMove1Square(CMCheckersBoard, numRowsInBoard, player, xIndex, yIndex) == true)
+					{
+						xLocArray[numMove] = xIndex;
+						yLocArray[numMove] = yIndex;
+						numMove++;
+					}
+				}
+			}
+		}
+	}
+
+	return numMove;
 }
 
 bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc)
@@ -437,7 +522,7 @@ bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsI
 {
 	if (player == WHITEPLAYER)
 	{
-		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) > numRowsInBoard)
+		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) >= numRowsInBoard)
 		{
 			return false;
 		}
@@ -448,7 +533,7 @@ bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsI
 	}
 	else if (player == REDPLAYER)
 	{
-		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) > numRowsInBoard)
+		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) >= numRowsInBoard)
 		{
 			return false;
 		}
@@ -480,7 +565,7 @@ bool IsPlayersPiece(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int pla
 	return false;
 }
 
-void getCoordinates(int squareNumber, int numRowsInBoard, int& xCoordinate, int& yCoordinate)
+void getCoordinates(int squareNumber, int numRowsInBoard, int &xCoordinate, int &yCoordinate)
 {
 	xCoordinate = squareNumber % numRowsInBoard;
 	yCoordinate = squareNumber / numRowsInBoard;
