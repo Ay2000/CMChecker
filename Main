@@ -80,7 +80,7 @@ int main()
 		}
 		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large." << endl << "8 <= number of squares <= 18" << endl;
-		else if (numRowsInBoard < 4)														//change back to numRowsInBoardMin
+		else if (numRowsInBoard < numRowsInBoardMin)
 			cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard % 2 == 1)
 			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
