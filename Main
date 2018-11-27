@@ -414,7 +414,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 		cout << "Error;  illegal move" << endl;
 		return false;
 	}
-	else if (abs(xdistance) == 2 && abs(ydistance) == 2 && !IsPlayersPiece(CMCheckersBoard, otherPlayer(player), (xInitialSquare + xdistance / 2), ydistance / 2))
+	else if (abs(xdistance) == 2 && abs(ydistance) == 2 && !IsPlayersPiece(CMCheckersBoard, otherPlayer(player), (xInitialSquare + numRowsInBoard + xdistance / 2) % numRowsInBoard, yInitialSquare + ydistance / 2))
 	{
 		cout << "Error;  illegal move" << endl;
 		return false;
@@ -433,7 +433,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	{
 		CMCheckersBoard[xFinalSquare][yFinalSquare] = CMCheckersBoard[xInitialSquare][yInitialSquare];
 		CMCheckersBoard[xInitialSquare][yInitialSquare] = 0;
-		CMCheckersBoard[(xInitialSquare + xdistance / 2) % numRowsInBoard][yInitialSquare + ydistance / 2] = 0;
+		CMCheckersBoard[(xInitialSquare + numRowsInBoard + xdistance / 2) % numRowsInBoard][yInitialSquare + ydistance / 2] = 0;
 
 	}
 	else
