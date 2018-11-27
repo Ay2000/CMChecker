@@ -536,16 +536,12 @@ bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsI
 {
 	if (player == WHITEPLAYER)
 	{
-		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) >= numRowsInBoard)
-			return false;
-		else if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
+		if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
 			return true;
 	}
 	else if (player == REDPLAYER)
 	{
-		if ((yLoc + yDirection) < 0 || (yLoc + yDirection) >= numRowsInBoard)
-			return false;
-		else if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
+		if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
 			return true;
 	}
 	return false;
