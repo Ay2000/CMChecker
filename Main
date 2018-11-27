@@ -534,16 +534,11 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 
 bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection)
 {
-	if (player == WHITEPLAYER)
-	{
-		if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
+	if (player == WHITEPLAYER && CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
 			return true;
-	}
-	else if (player == REDPLAYER)
-	{
-		if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
+	else if (player == REDPLAYER && CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
 			return true;
-	}
+
 	return false;
 }
 
