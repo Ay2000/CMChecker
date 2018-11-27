@@ -407,7 +407,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	xdistance = xFinalSquare - xInitialSquare;
 	if (xdistance >= numRowsInBoard - 2)
 		xdistance -= numRowsInBoard;
-	else if (xdistance <= 1 - numRowsInBoard)
+	else if (xdistance <= 2 - numRowsInBoard)
 		xdistance += numRowsInBoard;
 
 	ydistance = yFinalSquare - yInitialSquare;
