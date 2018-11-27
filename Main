@@ -261,16 +261,9 @@ void InitializeBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int nu
 		for (int i = 0; i < numRowsInBoard; i += 2)
 		{
 			CMCheckersBoard[i + 1][numRowsInBoard - j - 1] = REDSOLDIER;
+			CMCheckersBoard[i][numRowsInBoard - j] = REDSOLDIER;
 			CMCheckersBoard[i][j] = WHITESOLDIER;
-		}
-	}
-
-	for (int j = 2; j <= ((numRowsInBoard / 2) - 2); j += 2)
-	{
-		for (int i = 0; i < numRowsInBoard; i += 2)
-		{
-			CMCheckersBoard[i][numRowsInBoard - j - 1] = REDSOLDIER;
-			CMCheckersBoard[i + 1][j] = WHITESOLDIER;
+			CMCheckersBoard[i + 1][j + 1] = WHITESOLDIER;
 		}
 	}
 }
