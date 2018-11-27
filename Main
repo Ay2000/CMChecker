@@ -128,117 +128,120 @@ int main()
 		else if (player == REDPLAYER)
 			cout << "Red takes a turn." << endl;
 
-		jumped = false;
-		cout << "Enter the square number of the checker you want to move" << endl;
+		while (true) {
+			jumped = false;
+			cout << "Enter the square number of the checker you want to move" << endl;
 
-		if (!(cin >> initialSquare))
-		{
-			cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
-			cin.clear();
-			cin.ignore();
-			continue;
-		}
-		else if (initialSquare < 0 || initialSquare >= (numRowsInBoard * numRowsInBoard))
-		{
-			cerr << "ERROR: That square is not on the board." << endl << "Try again" << endl;
-			continue;
-		}
-
-		getCoordinates(initialSquare, numRowsInBoard, xInitialSquare, yInitialSquare);
-
-		if (IsPlayersPiece(myCMCheckersBoard, otherPlayer(player), xInitialSquare, yInitialSquare))
-		{
-			cerr << "ERROR: That square contains an opponent's checker." << endl << "Try again" << endl;
-			continue;
-		}
-		else if (myCMCheckersBoard[xInitialSquare][yInitialSquare] == NOPLAYER)
-		{
-			cerr << "ERROR: That square is empty." << endl << "Try again" << endl;
-			continue;
-		}
-		else if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
-		{
-			if (numJumps != 0)
-			{
-				cerr << "ERROR: You can jump with another checker, you may not move your chosen checker." << endl
-					<< "You can jump using checkers on the following squares:";
-				for (int index1 = 0; index1 < MAX_PIECES; index1++)
-				{
-					if (xIndicesJump[index1] == -1 || yIndicesJump[index1] == -1)
-						break;
-					cerr << " " << getSquare(xIndicesJump[index1], yIndicesJump[index1], numRowsInBoard);
-				}
-				cerr << endl << "Try again" << endl;
-				continue;
-			}
-			else if (!IsMove1Square(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
-			{
-				cerr << "ERROR: There is no legal move for this checker." << endl << "Try again" << endl;
-				continue;
-			}
-		}
-
-		cout << "Enter the square number of the square you want to move your checker to" << endl;
-
-		do
-		{
-			if (!(cin >> finalSquare))
+			if (!(cin >> initialSquare))
 			{
 				cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
 				cin.clear();
 				cin.ignore();
 				continue;
 			}
-			else if (finalSquare < 0 && finalSquare >= (numRowsInBoard * numRowsInBoard))
+			else if (initialSquare < 0 || initialSquare >= (numRowsInBoard * numRowsInBoard))
 			{
-				cerr << "ERROR: It is not possible to move to a square that is not on the board." << endl << "Try again" << endl;
+				cerr << "ERROR: That square is not on the board." << endl << "Try again" << endl;
 				continue;
 			}
 
-			getCoordinates(finalSquare, numRowsInBoard, xFinalSquare, yFinalSquare);
+			getCoordinates(initialSquare, numRowsInBoard, xInitialSquare, yInitialSquare);
 
-			if (myCMCheckersBoard[xFinalSquare][yFinalSquare] != NOPLAYER)
+			if (IsPlayersPiece(myCMCheckersBoard, otherPlayer(player), xInitialSquare, yInitialSquare))
 			{
-				cerr << "ERROR: It is not possible to move to a square that is already occupied." << endl << "Try again" << endl;
+				cerr << "ERROR: That square contains an opponent's checker." << endl << "Try again" << endl;
 				continue;
 			}
-			else if (IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare) && abs(xFinalSquare - xInitialSquare) == 1 && abs(yFinalSquare - yInitialSquare) == 1)
+			else if (myCMCheckersBoard[xInitialSquare][yInitialSquare] == NOPLAYER)
 			{
-				cerr << "ERROR: You can jump with this checker, you must jump not move 1 space." << endl << "Try again" << endl;
+				cerr << "ERROR: That square is empty." << endl << "Try again" << endl;
 				continue;
 			}
-			else if (!MakeMove(myCMCheckersBoard, numRowsInBoard, player, initialSquare, finalSquare, jumped))
+			else if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
 			{
-				cerr << "ERROR: Moving to that square is not legal, Try again." << endl;
-				continue;
+				if (numJumps != 0)
+				{
+					cerr << "ERROR: You can jump with another checker, you may not move your chosen checker." << endl
+						<< "You can jump using checkers on the following squares:";
+					for (int index1 = 0; index1 < MAX_PIECES; index1++)
+					{
+						if (xIndicesJump[index1] == -1 || yIndicesJump[index1] == -1)
+							break;
+						cerr << " " << getSquare(xIndicesJump[index1], yIndicesJump[index1], numRowsInBoard);
+					}
+					cerr << endl << "Try again" << endl;
+					continue;
+				}
+				else if (!IsMove1Square(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare))
+				{
+					cerr << "ERROR: There is no legal move for this checker." << endl << "Try again" << endl;
+					continue;
+				}
 			}
 
-			if (jumped)
+			cout << "Enter the square number of the square you want to move your checker to" << endl;
+
+			do
 			{
-				if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xFinalSquare, yFinalSquare))
+				if (!(cin >> finalSquare))
+				{
+					cerr << "ERROR: You did not enter an integer." << endl << "Try again" << endl;
+					cin.clear();
+					cin.ignore();
+					continue;
+				}
+				else if (finalSquare < 0 || finalSquare >= (numRowsInBoard * numRowsInBoard))
+				{
+					cerr << "ERROR: It is not possible to move to a square that is not on the board." << endl << "Try again" << endl;
+					continue;
+				}
+
+				getCoordinates(finalSquare, numRowsInBoard, xFinalSquare, yFinalSquare);
+
+				if (myCMCheckersBoard[xFinalSquare][yFinalSquare] != NOPLAYER)
+				{
+					cerr << "ERROR: It is not possible to move to a square that is already occupied." << endl << "Try again" << endl;
+					continue;
+				}
+				else if (IsJump(myCMCheckersBoard, numRowsInBoard, player, xInitialSquare, yInitialSquare) && abs(xFinalSquare - xInitialSquare) == 1 && abs(yFinalSquare - yInitialSquare) == 1)
+				{
+					cerr << "ERROR: You can jump with this checker, you must jump not move 1 space." << endl << "Try again" << endl;
+					continue;
+				}
+				else if (!MakeMove(myCMCheckersBoard, numRowsInBoard, player, initialSquare, finalSquare, jumped))
+				{
+					cerr << "ERROR: Moving to that square is not legal, Try again." << endl;
+					continue;
+				}
+
+				if (jumped)
+				{
+					if (!IsJump(myCMCheckersBoard, numRowsInBoard, player, xFinalSquare, yFinalSquare))
+						break;
+
+					initialSquare = finalSquare;
+					xInitialSquare = xFinalSquare;
+					yInitialSquare = yFinalSquare;
+
+					cout << "You can jump again, Please enter the next square you wish to move your checker to" << endl;
+				}
+				else
 					break;
 
-				initialSquare = finalSquare;
-				xInitialSquare = xFinalSquare;
-				yInitialSquare = yFinalSquare;
+			} while (true);
 
-				cout << "You can jump again, Please enter the next square you wish to move your checker to" << endl;
+			if (!CheckWin(myCMCheckersBoard, numRowsInBoard))
+			{
+				DisplayBoard(myCMCheckersBoard, numRowsInBoard);
+				player = otherPlayer(player);
+				break;
 			}
 			else
-				break;
-		} while (true);
-
-		if (!CheckWin(myCMCheckersBoard, numRowsInBoard))
-		{
-			DisplayBoard(myCMCheckersBoard, numRowsInBoard);
-			player = otherPlayer(player);
-			continue;
-		}
-		else
-		{
-			cout << "Enter any character to terminate the game then press the enter key" << endl << "The program will terminate after the player presses the enter key" << endl;
-			cin >> endChar;
-			return 0;
+			{
+				cout << "Enter any character to terminate the game then press the enter key" << endl << "The program will terminate after the player presses the enter key" << endl;
+				cin >> endChar;
+				return 0;
+			}
 		}
 	}
 }
