@@ -101,8 +101,8 @@ int main()
 			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large." << endl << "8 <= number of squares <= 18" << endl;
-		else if (numRowsInBoard < numRowsInBoardMin)
-			cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
+		//else if (numRowsInBoard < numRowsInBoardMin)																		UNCOMMENT AFTER
+		//	cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
 		else
 			break;
 
@@ -497,18 +497,12 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 		return false;
 	}
 	else if (abs(xdistance) == 1 && abs(ydistance) == 1) //if piece is moved one square diagonally
-	{
 		CMCheckersBoard[xFinalSquare][yFinalSquare] = CMCheckersBoard[xInitialSquare][yInitialSquare];
-		CMCheckersBoard[xInitialSquare][yInitialSquare] = 0;
-		return true;
-	}
 	else if (abs(xdistance) == 2 && abs(ydistance) == 2) //if piece jumps over another piece
 	{
 		CMCheckersBoard[xFinalSquare][yFinalSquare] = CMCheckersBoard[xInitialSquare][yInitialSquare];
-		CMCheckersBoard[xInitialSquare][yInitialSquare] = 0;
 		CMCheckersBoard[(xInitialSquare + numRowsInBoard + xdistance / 2) % numRowsInBoard][yInitialSquare + ydistance / 2] = 0;
 		jumped = true;
-		return true;
 	}
 	else //accounts for all other illegal moves
 	{
@@ -516,40 +510,37 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 		return false;
 	}
 
-	if (player == REDPLAYER && yFinalSquare == 0 || player == WHITEPLAYER && yFinalSquare == numRowsInBoard - 1) //determines if a piece was crowned king
+	//determines if a piece was crowned king
+	if (player == REDPLAYER && yFinalSquare == 0)
 	{
-		if (player == REDPLAYER)
+		if (CMCheckersBoard[xInitialSquare][yInitialSquare] = REDMULE)		//white player wins if red mule is crowned
 		{
-			if (CMCheckersBoard[xFinalSquare][yFinalSquare] = REDMULE)	//white player wins if red mule is crowned
-			{
-				CMCheckersBoard[xFinalSquare][yFinalSquare] = REDKING;
-				cout << "Red has created a Mule King,  White wins the game" << endl;
-				cout << "Enter any character to terminate the game then press the enter key" << endl;
-				cin >> gameOver;
-				terminate();
-
-			}
-			else {
-				CMCheckersBoard[xFinalSquare][yFinalSquare] = REDKING; //a soldier gets crowned king
-				return true;
-			}
-		} //end of redplayer
-		else if (player == WHITEPLAYER)
+			CMCheckersBoard[xFinalSquare][yFinalSquare] = REDKING;
+			cout << "Red has created a Mule King,  White wins the game" << endl;
+			cout << "Enter any character to terminate the game then press the enter key" << endl;
+			cin >> gameOver;
+			exit(WHITEWINS);
+		}
+		else {
+			CMCheckersBoard[xFinalSquare][yFinalSquare] = REDKING;			//a soldier gets crowned king
+		}
+	} //end of redplayer
+	else if (player == WHITEPLAYER && yFinalSquare == numRowsInBoard - 1)
+	{
+		if (CMCheckersBoard[xInitialSquare][yInitialSquare] = WHITEMULE)	//red player wins if white mule is crowned
 		{
-			if (CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEMULE)	//red player wins if white mule is crowned
-			{
-				CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;
-				cout << "White has created a Mule King,  Red wins the game" << endl;
-				cout << "Enter any character to terminate the game then press the enter key" << endl;
-				cin >> gameOver;
-				terminate();
-			}
-			else {
-				CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;	//a soldier gets crowned king
-				return true;
-			}
+			CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;
+			cout << "White has created a Mule King,  Red wins the game" << endl;
+			cout << "Enter any character to terminate the game then press the enter key" << endl;
+			cin >> gameOver;
+			exit(REDWINS);
+		}
+		else {
+			CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;	//a soldier gets crowned king
 		}
 	}
+	CMCheckersBoard[xInitialSquare][yInitialSquare] = 0;
+	return true;
 }
 
 //checks if a player won
