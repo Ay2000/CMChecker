@@ -97,12 +97,12 @@ int main()
 
 		if (!(cin >> numRowsInBoard))
 			cerr << "ERROR: Board size is not an integer." << endl << "8 <= number of squares <= 18" << endl;
+		else if (numRowsInBoard % 2 == 1)
+			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard < numRowsInBoardMin)
 			cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
-		else if (numRowsInBoard % 2 == 1)
-			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
 		else
 			break;
 
@@ -356,7 +356,7 @@ void DisplayBoard(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRo
 	cout << endl << endl;
 }
 
-//counts the number of jumpable pieces
+//counts the number of jumpable pieces the player has
 int CountJumps(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[])
 {
 	int numJumps = 0;
@@ -395,16 +395,19 @@ bool CheckList(int inArray1[], int inArray2[], int xIndex, int yIndex)
 	return false;
 }
 
-
+//counts the number of movable pieces the player has
 int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLocArray[], int yLocArray[])
 {
 	int numMove = 0;
 
+	//loop through all squares
 	for (int yIndex = 0; yIndex < numRowsInBoard; yIndex++)
 		for (int xIndex = 0; xIndex < numRowsInBoard; xIndex++)
 		{
+			//if piece can move and it is the player's piece
 			if (IsMove1Square(CMCheckersBoard, numRowsInBoard, player, xIndex, yIndex) && IsPlayersPiece(CMCheckersBoard, player, xIndex, yIndex))
 			{
+				//add x & y coordinates to the array and count the number of movable pieces
 				xLocArray[numMove] = xIndex;
 				yLocArray[numMove] = yIndex;
 				numMove++;
@@ -414,18 +417,21 @@ int CountMove1Squares(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int n
 	return numMove;
 }
 
+//checks if the piece can move
 bool IsMove1Square(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc)
 {
+	//if the piece is a king, it can move backwards
 	if (CMCheckersBoard[xLoc][yLoc] == WHITEKING || CMCheckersBoard[xLoc][yLoc] == REDKING)
 	{
-		if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, -1) == true)
+		if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, -1))
 			return true;
-		else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, -1) == true)
+		else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, -1))
 			return true;
 	}
-	else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, 1) == true)
+	//if not, check if it can jump forwards
+	else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, 1))
 		return true;
-	else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, 1) == true)
+	else if (CheckMove(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, 1))
 		return true;
 
 	return false;
@@ -437,20 +443,21 @@ bool IsJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBo
 	//if the piece is a king, it can jump backwards
 	if (CMCheckersBoard[xLoc][yLoc] == WHITEKING || CMCheckersBoard[xLoc][yLoc] == REDKING)
 	{
-		if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, -1) == true)
+		if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, -1))
 			return true;
-		else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, -1) == true)
+		else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, -1))
 			return true;
 	}
-	//if not, it can jump forwards
-	else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, 1) == true)
+	//if not, check if it can jump forwards
+	else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, 1, 1))
 		return true;
-	else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, 1) == true)
+	else if (CheckJump(CMCheckersBoard, numRowsInBoard, player, xLoc, yLoc, -1, 1))
 		return true;
 
 	return false;
 }
 
+//moves the piece
 bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int fromSquareNum, int toSquareNum, bool &jumped) //allows player to make a move
 {
 	char gameOver = '\0';		//variable used to see if the player has entered a key or not at the end of a game
@@ -474,19 +481,19 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 
 	if (abs(xdistance) > 2 && abs(ydistance) > 2)	//determines if the player moves the piece too far
 	{
-		cout << "Error;  illegal move" << endl;
+		cout << "ERROR: Illegal move." << endl;
 		return false;
 	}
 	//determines if a piece is moved 2 squares without jumping
 	else if (abs(xdistance) == 2 && abs(ydistance) == 2 && !IsPlayersPiece(CMCheckersBoard, otherPlayer(player), (xInitialSquare + numRowsInBoard + xdistance / 2) % numRowsInBoard, yInitialSquare + ydistance / 2))
 	{
-		cout << "Error;  illegal move" << endl;
+		cout << "ERROR: Illegal move." << endl;
 		return false;
 	}
 	//determines if the piece is moved in the wrong direction
 	else if ((player == WHITEPLAYER && CMCheckersBoard[xInitialSquare][yInitialSquare] != WHITEKING && ydistance <= 0) || (player == REDPLAYER && CMCheckersBoard[xInitialSquare][yInitialSquare] != REDKING && ydistance >= 0))
 	{
-		cout << "Error;  illegal move" << endl;
+		cout << "ERROR: Illegal move." << endl;
 		return false;
 	}
 	else if (abs(xdistance) == 1 && abs(ydistance) == 1) //if piece is moved one square diagonally
@@ -505,7 +512,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	}
 	else //accounts for all other illegal moves
 	{
-		cout << "Error;  illegal move" << endl;
+		cout << "ERROR: Illegal move." << endl;
 		return false;
 	}
 
@@ -545,6 +552,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	}
 }
 
+//checks if a player won
 bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
 {
 	int REDMULE_count = 0;
@@ -599,10 +607,22 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 //checks if piece can move in a specific direction (reverses y for red player)
 bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection)
 {
-	if (player == WHITEPLAYER && CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
-		return true;
-	else if (player == REDPLAYER && CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
-		return true;
+	if (player == WHITEPLAYER) {
+		//cannot go off board
+		if ((yLoc == 0 && yDirection == -1) || (yLoc == numRowsInBoard - 1 && yDirection == 1))
+			return false;
+		//checks if white piece can move in a direction accounting for the cylinder shape
+		else if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc + yDirection] == NOPLAYER)
+			return true;
+	}
+	else if (player == REDPLAYER) {
+		//cannot go off board
+		if ((yLoc == numRowsInBoard - 1 && yDirection == -1) || (yLoc == 0 && yDirection == 1))
+			return false;
+		//if it is a red piece, reverse the y direction
+		else if (CMCheckersBoard[(xLoc + numRowsInBoard + xDirection) % numRowsInBoard][yLoc - yDirection] == NOPLAYER)
+			return true;
+	}
 
 	return false;
 }
@@ -610,12 +630,22 @@ bool CheckMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsI
 //checks if piece can jump in a specific direction (reverses y for red player)
 bool CheckJump(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard, int player, int xLoc, int yLoc, int xDirection, int yDirection)
 {
-	//checks if white piece can jump in a direction accounting for the cylinder shape
-	if (player == WHITEPLAYER && IsPlayersPiece(CMCheckersBoard, REDPLAYER, (xLoc + numRowsInBoard + xDirection) % numRowsInBoard, yLoc + yDirection) && CMCheckersBoard[(xLoc + numRowsInBoard + 2 * xDirection) % numRowsInBoard][yLoc + 2 * yDirection] == NOPLAYER)
-		return true;
-	//if it is a red piece, reverse the y direction
-	else if (player == REDPLAYER && IsPlayersPiece(CMCheckersBoard, WHITEPLAYER, (xLoc + numRowsInBoard + xDirection) % numRowsInBoard, yLoc - yDirection) && CMCheckersBoard[(xLoc + numRowsInBoard + 2 * xDirection) % numRowsInBoard][yLoc - 2 * yDirection] == NOPLAYER)
-		return true;
+	if (player == WHITEPLAYER) {
+		//cannot jump off board
+		if ((yLoc <= 1 && yDirection == -1) || (yLoc >= numRowsInBoard - 2 && yDirection == 1))
+			return false;
+		//checks if white piece can jump in a direction accounting for the cylinder shape
+		else if (IsPlayersPiece(CMCheckersBoard, REDPLAYER, (xLoc + numRowsInBoard + xDirection) % numRowsInBoard, yLoc + yDirection) && CMCheckersBoard[(xLoc + numRowsInBoard + 2 * xDirection) % numRowsInBoard][yLoc + 2 * yDirection] == NOPLAYER)
+			return true;
+	}
+	else if (player == REDPLAYER) {
+		//cannot jump off board
+		if ((yLoc >= numRowsInBoard - 2 && yDirection == -1) || (yLoc <= 1 && yDirection == 1))
+			return false;
+		//if it is a red piece, reverse the y direction
+		else if (IsPlayersPiece(CMCheckersBoard, WHITEPLAYER, (xLoc + numRowsInBoard + xDirection) % numRowsInBoard, yLoc - yDirection) && CMCheckersBoard[(xLoc + numRowsInBoard + 2 * xDirection) % numRowsInBoard][yLoc - 2 * yDirection] == NOPLAYER)
+			return true;
+	}
 
 	return false;
 }
