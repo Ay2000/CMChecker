@@ -546,13 +546,15 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 //checks if a player won
 bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsInBoard)
 {
+	//Variables for keeping count of each pieces on the board
 	int REDMULE_count = 0;
 	int WHITEMULE_count = 0;
 	int WHITESOLDIER_count = 0;
 	int REDSOLDIER_count = 0;
 	int WHITEKING_count = 0;
 	int REDKING_count = 0;
-
+	
+	//This loop looks through every square and count every checker pieces on the board.
 	for (int j = 0; j < numRowsInBoard; j++)
 		for (int i = 0; i < numRowsInBoard; i++)
 		{
@@ -570,6 +572,8 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 				WHITEKING_count++;
 		}
 
+	//If any of the following conditions are true, this function returns true whenever it is called.
+	//These conditions depend on the count of board pieces which will determine the win or loss of the game
 	if (REDMULE_count == 0)
 	{
 		cout << "The Red Player has won the game by losing all of the Red Mules" << endl;
@@ -590,7 +594,7 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 		cout << "The Red Player has won by capturing all of the white players soldiers and kings" << endl;
 		return true;
 	}
-
+	//If none of the conditions are true, this function returns false
 	return false;
 }
 
