@@ -101,8 +101,8 @@ int main()
 			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large." << endl << "8 <= number of squares <= 18" << endl;
-		//else if (numRowsInBoard < numRowsInBoardMin)																		UNCOMMENT AFTER
-		//	cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
+		//else if (numRowsInBoard < numRowsInBoardMin)															UNCOMMENT BEFORE HANDING IN
+		//	cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;			UNCOMMENT BEFORE HANDING IN
 		else
 			break;
 
@@ -513,7 +513,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	//determines if a piece was crowned king
 	if (player == REDPLAYER && yFinalSquare == 0)
 	{
-		if (CMCheckersBoard[xInitialSquare][yInitialSquare] = REDMULE)		//white player wins if red mule is crowned
+		if (CMCheckersBoard[xInitialSquare][yInitialSquare] == REDMULE)		//white player wins if red mule is crowned
 		{
 			CMCheckersBoard[xFinalSquare][yFinalSquare] = REDKING;
 			cout << "Red has created a Mule King,  White wins the game" << endl;
@@ -527,7 +527,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	} //end of redplayer
 	else if (player == WHITEPLAYER && yFinalSquare == numRowsInBoard - 1)
 	{
-		if (CMCheckersBoard[xInitialSquare][yInitialSquare] = WHITEMULE)	//red player wins if white mule is crowned
+		if (CMCheckersBoard[xInitialSquare][yInitialSquare] == WHITEMULE)	//red player wins if white mule is crowned
 		{
 			CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;
 			cout << "White has created a Mule King,  Red wins the game" << endl;
@@ -536,7 +536,7 @@ bool MakeMove(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 			exit(REDWINS);
 		}
 		else {
-			CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;	//a soldier gets crowned king
+			CMCheckersBoard[xFinalSquare][yFinalSquare] = WHITEKING;		//a soldier gets crowned king
 		}
 	}
 	CMCheckersBoard[xInitialSquare][yInitialSquare] = 0;
@@ -553,7 +553,7 @@ bool CheckWin(int CMCheckersBoard[MAX_ARRAY_SIZE][MAX_ARRAY_SIZE], int numRowsIn
 	int REDSOLDIER_count = 0;
 	int WHITEKING_count = 0;
 	int REDKING_count = 0;
-	
+
 	//This loop looks through every square and count every checker pieces on the board.
 	for (int j = 0; j < numRowsInBoard; j++)
 		for (int i = 0; i < numRowsInBoard; i++)
