@@ -101,8 +101,8 @@ int main()
 			cerr << "ERROR: Board size odd." << endl << "8 <= number of squares <= 18" << endl;
 		else if (numRowsInBoard > numRowsInBoardMax)
 			cerr << "ERROR: Board size too large." << endl << "8 <= number of squares <= 18" << endl;
-		//else if (numRowsInBoard < numRowsInBoardMin)															UNCOMMENT BEFORE HANDING IN
-		//	cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;			UNCOMMENT BEFORE HANDING IN
+		else if (numRowsInBoard < numRowsInBoardMin)
+			cerr << "ERROR: Board size too small." << endl << "8 <= number of squares <= 18" << endl;
 		else
 			break;
 
